@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <title>PROTOTYPE WTF</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Rian</title>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
@@ -14,36 +15,75 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <style type="text/css">
-        * { font-family: 'montserrat', sans-serif;}
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'montserrat', sans-serif;
+        }
+        .top {
+            width: 100vw;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+        }
+        .top svg {
+            max-height: 5rem;
+            color: red;
+        }
+        .top .label {
+            margin-left: auto;
+            margin-right: auto;
+        }
         li {
             list-style: none;
             display: inline-block;
         }
+        input[type="button"] {padding: .5rem;}
         input[type="radio"] { display: none; }
         .indicator { display: none; }
+        #mapid {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 90vh;
+        }
     </style>
 </head>
 
 <body>
-
-    <ul style="text-align:center; position: absolute;top: 0; left: 0; right: 0; height: 50px;">
-        <li><input type="radio" name="kind" checked="checked" onchange="setKind('radar')">PROTOTYPE WTF</li>
-
-        <li><input type="button" onclick="stop(); showFrame(animationPosition - 1); return;" value="&lt;" /></li>
-        <li><input type="button" onclick="playStop();" value="Play / Stop" /></li>
-        <li><input type="button" onclick="stop(); showFrame(animationPosition + 1); return;" value="&gt;" /></li>
-
-        <li class="indicator">
-            <select id="colors" onchange="setColors(); return;">
-                <option value="1">Original</option>
-                <option value="2" selected="selected">Universal Blue</option>
-            </select>
-        </li>
-    </ul>
-
-    <div id="timestamp" style="text-align:center; position: absolute;top: 50px; left: 0; right: 0; height: 80px;">TIME</div>
-
-    <div id="mapid" style="position: absolute; top: 80px; left: 0; bottom: 0; right: 0;"></div>
+    <div class="top">
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+            <rect x="420.15" y="196.02" width="25.99" height="205.79" />
+            <rect x="420.15" y="132.29" width="25.99" height="35.25" />
+            <path
+                d="M593.54,374.58q-.36-8.37-.35-13.71V260.82q0-34.89-11.22-51.45t-39-16.55q-29.57,0-42.55,15.13t-13.35,46.46l25.63.36v-7.12q0-13.53,3.92-21.19T527,215.6a32.32,32.32,0,0,1,14.6-3.2q10,0,15.49,4.63t7.83,15.48q2.31,10.88,2.32,29.73v14.6q-22.8,10.34-38.64,18.69t-25.63,17.09a52.84,52.84,0,0,0-14.24,19.76q-4.45,11-4.45,26.71a51.33,51.33,0,0,0,5.16,23,41.91,41.91,0,0,0,14.42,16.73A37.92,37.92,0,0,0,525.54,405q16.37,0,27.24-9.62a51.77,51.77,0,0,0,15.13-22.07c.23,3.32.83,7.78,1.78,13.35s1.66,10.62,2.13,15.13H595q-.36-3.92-.72-11.39C594,385.43,593.78,380.16,593.54,374.58ZM567.2,358.37A53,53,0,0,1,548,379a26.69,26.69,0,0,1-14.24,3.92A22.78,22.78,0,0,1,517.35,376q-7.12-6.94-7.12-23.32a46.46,46.46,0,0,1,3.2-18,38.16,38.16,0,0,1,10-13.71A111.64,111.64,0,0,1,541,308.53q10.86-6.4,26.17-14.24Z" />
+            <path
+                d="M734.89,212.93q-3.57-9.78-10.68-15t-17.45-5.16a54.65,54.65,0,0,0-27.06,6.94,91.26,91.26,0,0,0-22.43,17.62V196h-26V401.81h26V232.34a78.46,78.46,0,0,1,17.45-13.89q9.24-5.34,18.15-5.34,10,0,14.78,6.59t4.81,22.61v159.5h26V236.61Q738.45,222.72,734.89,212.93Z" />
+            <path
+                d="M505.83,471.78c-12.58,8.32-25.78,12.43-39.42,12.43a77.48,77.48,0,0,1-27.79-5.43c-17.8-6.8-31.19-18.67-41.57-33.38-2.18-3.09-4.08-6.36-6.28-9.44,0,0-6.6-.14-11.57-.14a32.52,32.52,0,0,0-5.39.2q-1.94,2.69-3.67,5.47a94.49,94.49,0,0,1-28.64,29.28c-13.29,8.76-27.23,13.4-41.74,13.4a75.2,75.2,0,0,1-27.85-5.57c-17.79-7-31.08-19.08-41.37-33.92-2.2-3.18-4.12-6.52-6.52-9.56l-15.71.14a48.29,48.29,0,0,0-3.11,4.47,96,96,0,0,1-36.26,34.87,73.43,73.43,0,0,1-35.79,9.49,78.66,78.66,0,0,1-22.22-3.31c-10.72-3.15-19.43-9.5-28-16-2.66-2-5.1-3.69-8-6.06-.09.19-13.43,9.13-13.43,9.13,11.62,43.06,36.84,78.3,75.22,105.27,43.74,30.72,94.12,45.79,149,48.67q7.54.39,15.09.39a297,297,0,0,0,48.86-4.09c45.14-7.55,85.74-23.78,120.49-51.5,30.59-24.41,52.51-53.9,64.08-89.57.91-2.81,1.84-5.63,2.76-8.44l-14.59-9.13C517.78,463.34,510.94,468.4,505.83,471.78Zm-47.5,80c-30.85,24.61-67.41,40.18-111.77,47.6a277.73,277.73,0,0,1-45.73,3.84c-4.69,0-9.43-.13-14.1-.37-53.53-2.81-100.31-18-139-45.25-25.1-17.63-44-39.22-56.44-64.45A76.84,76.84,0,0,0,105.57,499a98,98,0,0,0,27.58,4.09,92.49,92.49,0,0,0,44.95-11.85,114.52,114.52,0,0,0,38.17-33.85c13.08,18.2,29.44,31.27,48.65,38.87a94.53,94.53,0,0,0,34.84,6.91c18,0,35.55-5.57,52.19-16.54a114.22,114.22,0,0,0,30.37-29.17c13.29,18.44,29.95,31.58,49.51,39.06a96.58,96.58,0,0,0,34.58,6.69,87.29,87.29,0,0,0,40.9-10.27C496.35,514.93,480.18,534.31,458.33,551.75Z" />
+            <path
+                d="M313.38,465.89V262.24q0-18.87,2.32-29.73T323.53,217Q329,212.4,339,212.39a32.11,32.11,0,0,1,14.59,3.21q6.42,3.21,10.33,10.86t3.92,21.18v7.13l25.63-.36q-.35-31.33-13.35-46.46t-42.55-15.14q-27.76,0-39,16.56t-11.21,51.45V465.89C294.06,470.06,308,470.06,313.38,465.89Z" />
+            <path d="M287.39,632.57l3.17,32c6.66,4.16,14.25,4.16,19.66,0l3.16-32A57.12,57.12,0,0,1,287.39,632.57Z" />
+        </svg>
+        <div class="label">
+            <ul>
+                <li><input type="radio" name="kind" checked="checked" onchange="setKind('radar')">PROTOTYPE</li>
+    
+                <li><input type="button" onclick="stop(); showFrame(animationPosition - 1); return;" value="&lt;" /></li>
+                <li><input type="button" onclick="playStop();" value="Play / Stop" /></li>
+                <li><input type="button" onclick="stop(); showFrame(animationPosition + 1); return;" value="&gt;" /></li>
+    
+                <li class="indicator">
+                    <select id="colors" onchange="setColors(); return;">
+                        <option value="1">Original</option>
+                        <option value="2" selected="selected">Universal Blue</option>
+                    </select>
+                </li>
+            </ul>            
+        </div>
+        <div id="timestamp">TIME</div>
+    </div>    
+    <div id="mapid"></div>
 
     <script>
         let map = L.map('mapid').setView([-7.75981, 110.40841], 10);
